@@ -1,0 +1,43 @@
+{
+  "name": "avito-test-task",
+  "version": "1.0.0",
+  "description": "Личный кабинет продавца на маркетплейсе",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "server": "json-server --watch db.json --port 3000 --host 0.0.0.0",
+    "lint": "eslint src --ext .ts,.tsx",
+    "test": "jest"
+  },
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.20.0",
+    "@mantine/core": "^7.3.0",
+    "@mantine/hooks": "^7.3.0",
+    "@mantine/form": "^7.3.0",
+    "@mantine/notifications": "^7.3.0",
+    "@tabler/icons-react": "^2.47.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.43",
+    "@types/react-dom": "^18.2.17",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "typescript": "^5.3.2",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1",
+    "html-webpack-plugin": "^5.5.3",
+    "ts-loader": "^9.5.1",
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "eslint": "^8.54.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "json-server": "^0.17.4",
+    "dotenv-webpack": "^8.0.1"
+  }
+}
+
