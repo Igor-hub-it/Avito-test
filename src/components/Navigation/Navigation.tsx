@@ -1,6 +1,6 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { Button } from '@mantine/core';
-import { IconShoppingBag, IconList } from '@tabler/icons-react';
+import { IconList, IconChartBar } from '@tabler/icons-react';
 import classes from './Navigation.module.css';
 
 export function Navigation() {
@@ -10,21 +10,21 @@ export function Navigation() {
     <nav className={classes.nav}>
       <Button
         component={NavLink}
-        to="/advertisements"
-        variant={location.pathname.startsWith('/advertisements') ? 'filled' : 'subtle'}
+        to="/list"
+        variant={location.pathname === '/list' || location.pathname.startsWith('/item') ? 'filled' : 'subtle'}
         leftSection={<IconList size={20} />}
         className={classes.link}
       >
-        Объявления
+        Список объявлений
       </Button>
       <Button
         component={NavLink}
-        to="/orders"
-        variant={location.pathname.startsWith('/orders') ? 'filled' : 'subtle'}
-        leftSection={<IconShoppingBag size={20} />}
+        to="/stats"
+        variant={location.pathname === '/stats' ? 'filled' : 'subtle'}
+        leftSection={<IconChartBar size={20} />}
         className={classes.link}
       >
-        Заказы
+        Статистика
       </Button>
     </nav>
   );

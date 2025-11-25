@@ -1,122 +1,142 @@
-import { Advertisement, CreateAdvertisementDto, UpdateAdvertisementDto, AdvertisementFilters, PaginationParams } from '@/types';
+import { 
+  Advertisement, 
+  AdvertisementFilters, 
+  AdvertisementsResponse,
+  RejectAdvertisementDto,
+  RequestChangesDto
+} from '@/types';
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:3001/api/v1';
 
 export const advertisementsApi = {
-  getAll: async (filters?: AdvertisementFilters, pagination?: PaginationParams): Promise<Advertisement[]> => {
+  getAll: async (
+    filters?: AdvertisementFilters,
+    page: number = 1,
+    limit: number = 10
+  ): Promise<AdvertisementsResponse> => {
     const params = new URLSearchParams();
     
-    // добавляем пагинацию
-    if (pagination) {
-      params.append('_start', pagination.start.toString());
-      params.append('_limit', pagination.limit.toString());
-    }
+    // пагинация
+    params.append('page', page.toString());
+    params.append('limit', limit.toString());
 
-    // поиск по названию
+    // поиск
     if (filters?.search) {
-      params.append('name_like', filters.search);
+      params.append('search', filters.search);
     }
 
+    // фильтр по статусу (множественный выбор)
+    if (filters?.status && filters.status.length > 0) {
+      filters.status.forEach(status => {
+        params.append('status', status);
+      });
+    }
+
+    // фильтр по категории
+    if (filters?.categoryId !== undefined) {
+      params.append('categoryId', filters.categoryId.toString());
+    }
+
+    // фильтр по цене
     if (filters?.minPrice !== undefined) {
-      params.append('price_gte', filters.minPrice.toString());
+      params.append('minPrice', filters.minPrice.toString());
     }
 
     if (filters?.maxPrice !== undefined) {
-      params.append('price_lte', filters.maxPrice.toString());
+      params.append('maxPrice', filters.maxPrice.toString());
     }
 
-    if (filters?.minViews !== undefined) {
-      params.append('views_gte', filters.minViews.toString());
-    }
-
-    if (filters?.maxViews !== undefined) {
-      params.append('views_lte', filters.maxViews.toString());
-    }
-
-    if (filters?.minLikes !== undefined) {
-      params.append('likes_gte', filters.minLikes.toString());
-    }
-
-    if (filters?.maxLikes !== undefined) {
-      params.append('likes_lte', filters.maxLikes.toString());
-    }
-
+    // сортировка
     if (filters?.sortBy) {
-      params.append('_sort', filters.sortBy);
-      params.append('_order', filters.sortOrder || 'asc');
+      params.append('sortBy', filters.sortBy);
+      params.append('sortOrder', filters.sortOrder || 'desc');
     }
 
-    const url = `${API_BASE_URL}/advertisements?${params.toString()}`;
-    // eslint-disable-next-line no-console
-    console.log('Запрос к API:', url);
+    const url = `${API_BASE_URL}/ads?${params.toString()}`;
+    
     try {
       const response = await fetch(url);
       if (!response.ok) {
-        // TODO: более детальная обработка ошибок
         throw new Error('Ошибка при загрузке объявлений');
       }
-      const data = await response.json();
+      const data: AdvertisementsResponse = await response.json();
       return data;
     } catch (error: any) {
       if (error.message === 'Failed to fetch' || error.name === 'TypeError') {
-        throw new Error('Не удалось подключиться к серверу. Убедитесь, что API сервер запущен на http://localhost:3000');
+        throw new Error('Не удалось подключиться к серверу. Убедитесь, что API сервер запущен на http://localhost:3001');
       }
       throw error;
     }
   },
 
   getById: async (id: number): Promise<Advertisement> => {
-    const response = await fetch(`${API_BASE_URL}/advertisements/${id}`);
+    const response = await fetch(`${API_BASE_URL}/ads/${id}`);
     if (!response.ok) {
-      throw new Error('Объявление не найдено');
+      if (response.status === 404) {
+        throw new Error('Объявление не найдено');
+      }
+      throw new Error('Ошибка при загрузке объявления');
     }
     return response.json();
   },
 
-  create: async (data: CreateAdvertisementDto): Promise<Advertisement> => {
-    // подготавливаем данные для отправки
-    const payload = {
-      ...data,
-      views: data.views || 0, // по умолчанию 0 просмотров
-      likes: data.likes || 0, // по умолчанию 0 лайков
-      createdAt: data.createdAt || new Date().toISOString(), // текущая дата если не указана
-    };
-    
-    const response = await fetch(`${API_BASE_URL}/advertisements`, {
+  approve: async (id: number): Promise<Advertisement> => {
+    const response = await fetch(`${API_BASE_URL}/ads/${id}/approve`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload),
     });
     if (!response.ok) {
-      // FIXME: можно вернуть более детальную ошибку от сервера
-      throw new Error('Ошибка при создании объявления');
+      if (response.status === 404) {
+        throw new Error('Объявление не найдено');
+      }
+      throw new Error('Ошибка при одобрении объявления');
     }
-    return response.json();
+    const data = await response.json();
+    return data.ad;
   },
 
-  update: async (id: number, data: UpdateAdvertisementDto): Promise<Advertisement> => {
-    const response = await fetch(`${API_BASE_URL}/advertisements/${id}`, {
-      method: 'PATCH',
+  reject: async (id: number, data: RejectAdvertisementDto): Promise<Advertisement> => {
+    const response = await fetch(`${API_BASE_URL}/ads/${id}/reject`, {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(data),
     });
     if (!response.ok) {
-      throw new Error('Ошибка при обновлении объявления');
+      if (response.status === 404) {
+        throw new Error('Объявление не найдено');
+      }
+      if (response.status === 400) {
+        throw new Error('Некорректные данные для отклонения');
+      }
+      throw new Error('Ошибка при отклонении объявления');
     }
-    return response.json();
+    const result = await response.json();
+    return result.ad;
   },
 
-  delete: async (id: number): Promise<void> => {
-    const response = await fetch(`${API_BASE_URL}/advertisements/${id}`, {
-      method: 'DELETE',
+  requestChanges: async (id: number, data: RequestChangesDto): Promise<Advertisement> => {
+    const response = await fetch(`${API_BASE_URL}/ads/${id}/request-changes`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
     });
     if (!response.ok) {
-      throw new Error('Ошибка при удалении объявления');
+      if (response.status === 404) {
+        throw new Error('Объявление не найдено');
+      }
+      if (response.status === 400) {
+        throw new Error('Некорректные данные для запроса изменений');
+      }
+      throw new Error('Ошибка при запросе изменений');
     }
+    const result = await response.json();
+    return result.ad;
   },
 };
 

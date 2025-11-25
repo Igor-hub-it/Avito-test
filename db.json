@@ -1,0 +1,115 @@
+{
+  "advertisements": [
+    {
+      "id": 1,
+      "name": "Смартфон Samsung Galaxy S21",
+      "price": 45000,
+      "description": "Отличный смартфон с камерой 64 МП и экраном 6.2 дюйма",
+      "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400",
+      "views": 1250,
+      "likes": 89,
+      "createdAt": "2024-01-15T10:30:00.000Z"
+    },
+    {
+      "id": 2,
+      "name": "Ноутбук MacBook Pro 13",
+      "price": 120000,
+      "description": "Мощный ноутбук для работы и творчества",
+      "imageUrl": "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=400",
+      "views": 890,
+      "likes": 45,
+      "createdAt": "2024-01-20T14:20:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "Наушники Sony WH-1000XM4",
+      "price": 25000,
+      "description": "Беспроводные наушники с шумоподавлением",
+      "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400",
+      "views": 2100,
+      "likes": 156,
+      "createdAt": "2024-02-01T09:15:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "Фотоаппарат Canon EOS R6",
+      "price": 180000,
+      "description": "Профессиональная камера для фотографии и видео",
+      "imageUrl": "https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400",
+      "views": 560,
+      "likes": 32,
+      "createdAt": "2024-02-10T16:45:00.000Z"
+    },
+    {
+      "id": 5,
+      "name": "Планшет iPad Air",
+      "price": 55000,
+      "description": "Легкий и мощный планшет для работы и развлечений",
+      "imageUrl": "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400",
+      "views": 1780,
+      "likes": 112,
+      "createdAt": "2024-02-15T11:30:00.000Z"
+    },
+    {
+      "name": "СПБ",
+      "price": 52,
+      "description": "24024024024024042004202404202402402040240",
+      "imageUrl": "https://img.goodfon.ru/wallpaper/big/d/1c/smailiki-zheltye-shary-ulybki.webp",
+      "views": 0,
+      "likes": 0,
+      "createdAt": "2025-11-22T13:58:00.890Z",
+      "id": 6
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "items": [
+        {
+          "advertisementId": 1,
+          "quantity": 1,
+          "price": 45000
+        },
+        {
+          "advertisementId": 3,
+          "quantity": 1,
+          "price": 25000
+        }
+      ],
+      "totalPrice": 70000,
+      "status": "pending",
+      "createdAt": "2024-02-20T10:00:00.000Z"
+    },
+    {
+      "id": 2,
+      "items": [
+        {
+          "advertisementId": 2,
+          "quantity": 1,
+          "price": 120000
+        }
+      ],
+      "totalPrice": 120000,
+      "status": "completed",
+      "createdAt": "2024-02-18T14:30:00.000Z"
+    },
+    {
+      "id": 3,
+      "items": [
+        {
+          "advertisementId": 5,
+          "quantity": 1,
+          "price": 55000
+        },
+        {
+          "advertisementId": 1,
+          "quantity": 1,
+          "price": 45000
+        }
+      ],
+      "totalPrice": 100000,
+      "status": "pending",
+      "createdAt": "2024-02-19T09:15:00.000Z"
+    }
+  ]
+}

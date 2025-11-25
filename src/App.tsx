@@ -4,9 +4,10 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Navigation } from '@/components/Navigation/Navigation';
 import { AdvertisementsPage } from '@/pages/AdvertisementsPage/AdvertisementsPage';
 import { AdvertisementPage } from '@/pages/AdvertisementPage/AdvertisementPage';
-import { OrdersPage } from '@/pages/OrdersPage/OrdersPage';
+import { StatsPage } from '@/pages/StatsPage/StatsPage';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/carousel/styles.css';
 import classes from './App.module.css';
 
 function App() {
@@ -18,11 +19,11 @@ function App() {
           <Navigation />
           <main className={classes.main}>
             <Routes>
-              <Route path="/" element={<Navigate to="/advertisements" replace />} />
-              <Route path="/advertisements" element={<AdvertisementsPage />} />
-              <Route path="/advertisements/:id" element={<AdvertisementPage />} />
-              <Route path="/orders" element={<OrdersPage />} />
-              <Route path="*" element={<Navigate to="/advertisements" replace />} />
+              <Route path="/" element={<Navigate to="/list" replace />} />
+              <Route path="/list" element={<AdvertisementsPage />} />
+              <Route path="/item/:id" element={<AdvertisementPage />} />
+              <Route path="/stats" element={<StatsPage />} />
+              <Route path="*" element={<Navigate to="/list" replace />} />
             </Routes>
           </main>
         </div>

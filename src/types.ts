@@ -1,60 +1,127 @@
+// Типы для объявлений
+export type AdvertisementStatus = 'pending' | 'approved' | 'rejected' | 'draft';
+export type AdvertisementPriority = 'normal' | 'urgent';
+export type ModerationAction = 'approved' | 'rejected' | 'requestChanges';
+
+export interface Seller {
+  id: number;
+  name: string;
+  rating: string;
+  totalAds: number;
+  registeredAt: string;
+}
+
+export interface ModerationHistory {
+  id: number;
+  moderatorId: number;
+  moderatorName: string;
+  action: ModerationAction;
+  reason: string | null;
+  comment: string;
+  timestamp: string;
+}
+
 export interface Advertisement {
   id: number;
-  name: string;
+  title: string;
+  description: string;
   price: number;
-  description?: string;
-  imageUrl?: string;
-  views: number;
-  likes: number;
+  category: string;
+  categoryId: number;
+  status: AdvertisementStatus;
+  priority: AdvertisementPriority;
   createdAt: string;
-}
-
-export interface OrderItem {
-  advertisementId: number;
-  quantity: number;
-  price: number;
-}
-
-export interface Order {
-  id: number;
-  items: OrderItem[];
-  totalPrice: number;
-  status: 'pending' | 'completed' | 'cancelled';
-  createdAt: string;
-}
-
-export interface CreateAdvertisementDto {
-  name: string;
-  price: number;
-  description?: string;
-  imageUrl?: string;
-  views?: number;
-  likes?: number;
-  createdAt?: string;
-}
-
-export interface UpdateAdvertisementDto {
-  name?: string;
-  price?: number;
-  description?: string;
-  imageUrl?: string;
+  updatedAt: string;
+  images: string[];
+  seller: Seller;
+  characteristics: Record<string, string>;
+  moderationHistory: ModerationHistory[];
 }
 
 export interface AdvertisementFilters {
   search?: string;
+  status?: AdvertisementStatus[];
+  categoryId?: number;
   minPrice?: number;
   maxPrice?: number;
-  minViews?: number;
-  maxViews?: number;
-  minLikes?: number;
-  maxLikes?: number;
-  sortBy?: 'price' | 'views' | 'likes' | 'createdAt';
+  sortBy?: 'createdAt' | 'price' | 'priority';
   sortOrder?: 'asc' | 'desc';
 }
 
-export interface PaginationParams {
-  start: number;
-  limit: number;
+export interface Pagination {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+  itemsPerPage: number;
+}
+
+export interface AdvertisementsResponse {
+  ads: Advertisement[];
+  pagination: Pagination;
+}
+
+// Типы для модерации
+export type RejectionReason = 
+  | 'Запрещенный товар'
+  | 'Неверная категория'
+  | 'Некорректное описание'
+  | 'Проблемы с фото'
+  | 'Подозрение на мошенничество'
+  | 'Другое';
+
+export interface RejectAdvertisementDto {
+  reason: RejectionReason;
+  comment?: string;
+}
+
+export interface RequestChangesDto {
+  reason: RejectionReason;
+  comment?: string;
+}
+
+// Типы для статистики
+export type StatsPeriod = 'today' | 'week' | 'month' | 'custom';
+
+export interface StatsSummary {
+  totalReviewed: number;
+  totalReviewedToday: number;
+  totalReviewedThisWeek: number;
+  totalReviewedThisMonth: number;
+  approvedPercentage: number;
+  rejectedPercentage: number;
+  requestChangesPercentage: number;
+  averageReviewTime: number;
+}
+
+export interface ActivityData {
+  date: string;
+  approved: number;
+  rejected: number;
+  requestChanges: number;
+}
+
+export interface DecisionsData {
+  approved: number;
+  rejected: number;
+  requestChanges: number;
+}
+
+export interface Moderator {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  statistics: ModeratorStats;
+  permissions: string[];
+}
+
+export interface ModeratorStats {
+  totalReviewed: number;
+  todayReviewed: number;
+  thisWeekReviewed: number;
+  thisMonthReviewed: number;
+  averageReviewTime: number;
+  approvalRate: number;
 }
 
 

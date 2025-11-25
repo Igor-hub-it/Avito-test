@@ -1,11 +1,10 @@
 {
   "name": "avito-test-task",
   "version": "1.0.0",
-  "description": "Личный кабинет продавца на маркетплейсе",
+  "description": "Система управления объявлениями для модерации",
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
-    "server": "json-server --watch db.json --port 3000 --host 0.0.0.0",
     "lint": "eslint src --ext .ts,.tsx",
     "test": "jest"
   },
@@ -17,6 +16,7 @@
     "@mantine/hooks": "^7.3.0",
     "@mantine/form": "^7.3.0",
     "@mantine/notifications": "^7.3.0",
+    "@mantine/carousel": "^7.3.0",
     "@tabler/icons-react": "^2.47.0"
   },
   "devDependencies": {
